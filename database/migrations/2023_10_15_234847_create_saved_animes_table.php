@@ -1,6 +1,8 @@
 <?php
 
-use App\Models\AnimeList;
+use App\Enums\AnimeSavedScoreEnum;
+use App\Enums\AnimeSavedStatusEnum;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,18 +14,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('anime_list_items', function (Blueprint $table) {
+        Schema::create('saved_animes', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained();
-            $table->foreignIdFor(AnimeList::class)->constrained();
 
             $table->bigInteger('mal_id');
+            $table->string('title');
             $table->string('notes')->nullable();
-            $table->foreignIdFor(AnimeListItemStatus::class)->constrained()->default(0);
+            $table->enum('status', AnimeSavedStatusEnum::names())->default(AnimeSavedStatusEnum::Watching->name);
+            $table->enum('score', AnimeSavedScoreEnum::names())->default(AnimeSavedScoreEnum::Zero->name);
             $table->integer('rewatch_count')->default(0);
+            $table->integer('episode_count')->default(0);
+            $table->boolean('favorite')->default(false);
+
+            $table->text('image_cover_url');
+            $table->text('image_banner_url')->nullable();
 
             $table->timestamp('started_at')->nullable();
             $table->timestamp('finished_at')->nullable();
+
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
@@ -34,6 +43,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('anime_list_items');
+        Schema::dropIfExists('saved_animes');
     }
 };

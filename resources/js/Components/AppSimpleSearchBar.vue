@@ -1,13 +1,4 @@
 <script setup>
-import { ref, computed } from "vue";
-import {
-    Combobox,
-    ComboboxInput,
-    ComboboxOptions,
-    ComboboxOption,
-} from "@headlessui/vue";
-import { onMounted } from "vue";
-
 const props = defineProps({
     animes: {
         type: Array,
@@ -24,7 +15,8 @@ const props = defineProps({
                 placeholder="Search…"
                 class="input input-bordered"
             />
-            <button class="btn btn-square">
+
+            <button class="btn btn-square dark:btn-primary">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     class="w-6 h-6"

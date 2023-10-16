@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\AnimeListCustom;
+use App\Models\SavedAnime;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class AnimeListCustomPolicy
+class SavedAnimePolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +19,7 @@ class AnimeListCustomPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, AnimeListCustom $animeListCustom): bool
+    public function view(User $user, SavedAnime $savedAnime): bool
     {
         //
     }
@@ -35,7 +35,7 @@ class AnimeListCustomPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, AnimeListCustom $animeListCustom): bool
+    public function update(User $user, SavedAnime $savedAnime): bool
     {
         //
     }
@@ -43,7 +43,7 @@ class AnimeListCustomPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, AnimeListCustom $animeListCustom): bool
+    public function delete(User $user, SavedAnime $savedAnime): bool
     {
         //
     }
@@ -51,7 +51,7 @@ class AnimeListCustomPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, AnimeListCustom $animeListCustom): bool
+    public function restore(User $user, SavedAnime $savedAnime): bool
     {
         //
     }
@@ -59,7 +59,7 @@ class AnimeListCustomPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, AnimeListCustom $animeListCustom): bool
+    public function forceDelete(User $user, SavedAnime $savedAnime): bool
     {
         //
     }

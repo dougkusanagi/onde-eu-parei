@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\Dashboard;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SavedAnimeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +18,7 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
+    return inertia('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
@@ -26,7 +26,11 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', Dashboard::class)->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/home', HomeController::class)->middleware(['auth', 'verified'])->name('home');
+
+Route::controller(SavedAnimeController::class)->group(function () {
+    Route::post('/saved-animes', 'store')->name('saved-animes.store');
+})->middleware(['auth']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

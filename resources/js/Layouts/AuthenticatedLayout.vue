@@ -1,13 +1,32 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 import Dropdown from "@/Components/Dropdown.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 import NavLink from "@/Components/NavLink.vue";
 import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, usePage } from "@inertiajs/vue3";
+import { useToast } from "vue-toastification";
+import { onMounted } from "vue";
+import { watch } from "vue";
 
 const showingNavigationDropdown = ref(false);
+
+const flash = computed(() => usePage().props.flash);
+const toast = useToast();
+
+function triggerFlash() {
+    const types = Object.keys(flash.value);
+    types.forEach((type) => {
+        if (flash.value[type] !== null) {
+            toast(flash.value[type], { type });
+            flash.value[type] = null;
+        }
+    });
+}
+
+onMounted(triggerFlash);
+watch(flash, triggerFlash);
 </script>
 
 <template>
@@ -22,7 +41,7 @@ const showingNavigationDropdown = ref(false);
                         <div class="flex">
                             <!-- Logo -->
                             <div class="flex items-center shrink-0">
-                                <Link :href="route('dashboard')">
+                                <Link :href="route('home')">
                                     <ApplicationLogo
                                         class="block w-auto text-gray-800 fill-current h-9 dark:text-gray-200"
                                     />
@@ -34,10 +53,10 @@ const showingNavigationDropdown = ref(false);
                                 class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex"
                             >
                                 <NavLink
-                                    :href="route('dashboard')"
-                                    :active="route().current('dashboard')"
+                                    :href="route('home')"
+                                    :active="route().current('home')"
                                 >
-                                    Dashboard
+                                    Home
                                 </NavLink>
                             </div>
                         </div>
@@ -141,10 +160,10 @@ const showingNavigationDropdown = ref(false);
                 >
                     <div class="pt-2 pb-3 space-y-1">
                         <ResponsiveNavLink
-                            :href="route('dashboard')"
-                            :active="route().current('dashboard')"
+                            :href="route('home')"
+                            :active="route().current('home')"
                         >
-                            Dashboard
+                            Home
                         </ResponsiveNavLink>
                     </div>
 
