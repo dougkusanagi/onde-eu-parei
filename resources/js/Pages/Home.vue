@@ -145,8 +145,8 @@ const props = defineProps({
 
                                     <div class="min-w-full card-actions">
                                         <div class="min-w-full join">
-                                            <select
-                                                class="flex-1 select select !px-2 join-item"
+                                            <!-- <select
+                                                class="flex-1 select !px-2 join-item"
                                             >
                                                 <option
                                                     v-for="i in [
@@ -158,7 +158,22 @@ const props = defineProps({
                                                 >
                                                     {{ i + 1 }} Episódio
                                                 </option>
-                                            </select>
+                                            </select> -->
+
+                                            <form
+                                                @submit.prevent="
+                                                    changeEpisode(anime)
+                                                "
+                                                action=""
+                                            >
+                                                <input
+                                                    v-model="anime.episodes"
+                                                    type="number"
+                                                    min="0"
+                                                    placeholder="Episodio"
+                                                    class="w-full max-w-xs input"
+                                                />
+                                            </form>
 
                                             <div class="dropdown">
                                                 <label

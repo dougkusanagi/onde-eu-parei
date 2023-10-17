@@ -358,6 +358,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/nprogress@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "@types/nprogress@npm:0.2.1"
+  checksum: fe9db499f3d9cff90bad9f49336ff82ea444a51ca336a25ec401d18cc8fb12e546b622bdc11379491475c22cd4d9fb1195c805055cacb365627c667e52d618b1
+  languageName: node
+  linkType: hard
+
 "@types/ziggy-js@npm:^1.3.2":
   version: 1.3.3
   resolution: "@types/ziggy-js@npm:1.3.3"
@@ -996,9 +1003,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.4.535":
-  version: 1.4.554
-  resolution: "electron-to-chromium@npm:1.4.554"
-  checksum: cbac43c50b43777327f4a7bf149ee3088c1da8b91bbcd80f78d2cc77bc52763f6d0941574499239d9caefd3430d3093f865e5f1093371418f7d6b70301eeae9b
+  version: 1.4.555
+  resolution: "electron-to-chromium@npm:1.4.555"
+  checksum: d65d8a2a199fef1ae32e5cee9d1ce9e3ca94418d6f5c272ab88ec7c8a12ad942b544baf0f34fe078cf350e5203536c60a87bd674d0fe293e4db442146aaf5b6c
   languageName: node
   linkType: hard
 
@@ -1948,9 +1955,9 @@ __metadata:
   linkType: hard
 
 "object-inspect@npm:^1.9.0":
-  version: 1.12.3
-  resolution: "object-inspect@npm:1.12.3"
-  checksum: dabfd824d97a5f407e6d5d24810d888859f6be394d8b733a77442b277e0808860555176719c5905e765e3743a7cada6b8b0a3b85e5331c530fd418cc8ae991db
+  version: 1.13.0
+  resolution: "object-inspect@npm:1.13.0"
+  checksum: 21353e910a3079466cb44adca71d8bef15bd8b87e518eb68bb33d82c5c70b83193993edce432cc92268f7dd02c4a8ab338663a011844367d0bd0559f6dde1fed
   languageName: node
   linkType: hard
 
@@ -2246,17 +2253,20 @@ __metadata:
     "@headlessui/vue": ^1.7.16
     "@inertiajs/vue3": ^1.0.0
     "@tailwindcss/forms": ^0.5.3
+    "@types/nprogress": ^0.2.1
     "@types/ziggy-js": ^1.3.2
     "@vitejs/plugin-vue": ^4.0.0
     autoprefixer: ^10.4.12
     axios: ^1.1.2
     daisyui: latest
     laravel-vite-plugin: ^0.8.0
+    nprogress: ^0.2.0
     postcss: ^8.4.18
     tailwindcss: ^3.2.1
     typescript: ^5.0.2
     vite: ^4.0.0
     vue: ^3.2.41
+    vue-toastification: next
     vue-tsc: ^1.2.0
   languageName: unknown
   linkType: soft
@@ -2667,6 +2677,15 @@ __metadata:
     de-indent: ^1.0.2
     he: ^1.2.0
   checksum: eba9d2eed6b7110c963bc356b47bdd11d4023d25148abb7e5f7826db2fefe7ad8a575787ee0d8fa47701d44a6f54bde475279b1319f44e1049271eb2419f93a7
+  languageName: node
+  linkType: hard
+
+"vue-toastification@npm:next":
+  version: 2.0.0-rc.5
+  resolution: "vue-toastification@npm:2.0.0-rc.5"
+  peerDependencies:
+    vue: ^3.0.2
+  checksum: 358ac0eb8f40b1bbadc84c5a686d80c9fd7d6c37a3cec0c3a422f1157f4aa8a882e585404fe4efb7ac4ae52d627c65a30750b31425d7df1d6643f0c80ffcd668
   languageName: node
   linkType: hard
 
