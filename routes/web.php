@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 Route::get('/', function () {
     return inertia('Welcome', [
@@ -29,7 +29,10 @@ Route::get('/', function () {
 Route::get('/home', HomeController::class)->middleware(['auth', 'verified'])->name('home');
 
 Route::controller(SavedAnimeController::class)->group(function () {
-    Route::post('/saved-animes', 'store')->name('saved-animes.store');
+    Route::post('/saved-anime', 'store')->name('saved-animes.store');
+    Route::put('/saved-anime/update-episode', 'updateAnimeEpisode')->name('saved-animes.save-episode');
+    Route::put('/saved-anime/update-link', 'updateAnimeLink')->name('saved-animes.update-link');
+    Route::delete('/saved-anime', 'destroy')->name('saved-animes.destroy');
 })->middleware(['auth']);
 
 Route::middleware('auth')->group(function () {

@@ -17,6 +17,7 @@ const toast = useToast();
 
 function triggerFlash() {
     const types = Object.keys(flash.value);
+
     types.forEach((type) => {
         if (flash.value[type] !== null) {
             toast(flash.value[type], { type });

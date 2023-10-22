@@ -1,224 +1,280 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, router } from "@inertiajs/vue3";
+import debounce from "@/Composables/debounce.js";
 
-import HeroiconsPlusCircle from "@/Icons/HeroiconsPlusCircle.vue";
 import AppSimpleSearchBar from "@/Components/AppSimpleSearchBar.vue";
+import PlusCircle from "@/Icons/HeroIcons/PlusCircle.vue";
+import Ellipsis from "@/Icons/HeroIcons/Ellipsis.vue";
+import ArrowTopRightSquare from "@/Icons/HeroIcons/ArrowTopRightSquare.vue";
+import TrashBasic from "@/Icons/HeroIcons/TrashBasic.vue";
+import PencilSquare from "@/Icons/HeroIcons/PencilSquare.vue";
 
 const props = defineProps({
-    animes: Object,
-    saved_animes: {
-        type: Array,
-        default: [],
-    },
+	animes: Object,
+	saved_animes: {
+		type: Array,
+		default: [],
+	},
 });
+
+function updateSavedAnimeEpisode(saved_anime, episode_count) {
+	debounce(() => {
+		router.put(
+			route("saved-animes.save-episode"),
+			{
+				saved_anime,
+				episode_count,
+			},
+			{
+				preserveScroll: true,
+			}
+		);
+	}, 700);
+}
+
+function updateSavedAnimeLink(form) {
+	const form_data = new FormData(form);
+	const id = form_data.get("id") || null;
+	const link = form_data.get("link") || null;
+
+	debounce(() => {
+		router.put(
+			route("saved-animes.update-link"),
+			{
+				id,
+				link,
+			},
+			{
+				preserveScroll: true,
+			}
+		);
+	}, 700);
+}
+
+function removeAnime(id) {
+	router.delete(
+		route("saved-animes.destroy"),
+		{
+			id,
+		},
+		{
+			preserveScroll: true,
+		}
+	);
+}
 </script>
 
 <template>
-    <Head title="Home" />
+	<Head title="Home" />
 
-    <AuthenticatedLayout>
-        <template #header>
-            <div class="flex items-center justify-between">
-                <h2
-                    class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
-                >
-                    Home
-                </h2>
+	<AuthenticatedLayout>
+		<template #header>
+			<div class="flex items-center justify-between">
+				<h2
+					class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
+				>
+					Home
+				</h2>
 
-                <AppSimpleSearchBar />
-            </div>
-        </template>
+				<AppSimpleSearchBar />
+			</div>
+		</template>
 
-        <div class="pt-12 pb-16">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 sm:rounded-lg">
-                <h3
-                    class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
-                    id="top-10"
-                >
-                    # 10 Mais Populares
-                </h3>
-            </div>
+		<div class="pt-12 pb-32">
+			<div class="mx-auto max-w-7xl sm:px-6 lg:px-8 sm:rounded-lg">
+				<h3
+					class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
+					id="top-10"
+				>
+					# 10 Mais Populares
+				</h3>
+			</div>
 
-            <div
-                class="grid grid-cols-10 gap-4 px-6 mx-auto mt-6 mb-12 max-w-7xl sm:px-6 lg:px-8 sm:rounded-lg"
-            >
-                <div
-                    class="shadow-xl card card-compact bg-base-200"
-                    v-for="anime in animes.data"
-                    :title="anime.title"
-                >
-                    <div>
-                        <div
-                            class="absolute flex flex-col justify-end group-hover:justify-between w-full bottom-[48px] p-2 h-36"
-                        >
-                            <h4
-                                class="z-10 text-xs font-black text-center text-white card-title line-clamp-3"
-                            >
-                                {{ anime.title }}
-                            </h4>
+			<div
+				class="grid grid-cols-10 gap-4 px-6 mx-auto mt-6 mb-12 max-w-7xl sm:px-6 lg:px-8 sm:rounded-lg"
+			>
+				<div
+					class="shadow-xl card card-compact bg-base-200"
+					v-for="anime in animes.data"
+					:title="anime.title"
+					:key="anime.id"
+				>
+					<div>
+						<div
+							class="absolute flex flex-col justify-end group-hover:justify-between w-full bottom-[48px] p-2 h-36"
+						>
+							<h4
+								class="z-10 text-xs font-black text-center text-white card-title line-clamp-3"
+							>
+								{{ anime.title }}
+							</h4>
 
-                            <div
-                                class="absolute inset-0 opacity-80 bg-gradient-to-t from-black via-black to-transparent"
-                            ></div>
-                        </div>
-                    </div>
+							<div
+								class="absolute inset-0 opacity-80 bg-gradient-to-t from-black via-black to-transparent"
+							></div>
+						</div>
+					</div>
 
-                    <figure>
-                        <img
-                            class="w-full h-[170px] object-cover"
-                            :src="anime.images.webp.image_url"
-                        />
-                    </figure>
+					<figure>
+						<img
+							class="w-full h-[170px] object-cover"
+							:src="anime.images.webp.image_url"
+						/>
+					</figure>
 
-                    <div
-                        class="flex flex-col items-center justify-between !p-2 card-body"
-                    >
-                        <div class="min-w-full card-actions">
-                            <Link
-                                method="post"
-                                as="button"
-                                :href="route('saved-animes.store')"
-                                :data="{ mal_id: anime.mal_id }"
-                                class="flex-1 col-span-1 btn btn-square btn-outline btn-sm"
-                                title="Adicionar à lista"
-                            >
-                                <HeroiconsPlusCircle class="w-5 h-5" />
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </div>
+					<div
+						class="flex flex-col items-center justify-between !p-2 card-body"
+					>
+						<div class="min-w-full card-actions">
+							<Link
+								method="post"
+								as="button"
+								:href="route('saved-animes.store')"
+								:data="{ mal_id: anime.mal_id }"
+								class="flex-1 col-span-1 btn btn-square btn-outline btn-primary btn-sm"
+								title="Adicionar à lista"
+							>
+								<PlusCircle class="w-5 h-5" />
+							</Link>
+						</div>
+					</div>
+				</div>
+			</div>
 
-            <div class="mt-6">
-                <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div
-                        class="bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg"
-                    >
-                        <div class="flex justify-between p-6 pb-0 lg:px-8">
-                            <h3
-                                class="font-semibold leading-tight text-gray-800 dark:text-gray-200"
-                            >
-                                <Link href="#" class="text-lg btn btn-link">
-                                    Minha Lista
-                                </Link>
-                            </h3>
+			<div class="mt-6">
+				<div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+					<div class="bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
+						<div class="flex justify-between p-6 pb-0 lg:px-4">
+							<h3
+								class="font-semibold leading-tight text-gray-800 dark:text-gray-200"
+							>
+								<Link href="#" class="text-lg btn btn-link"> Minha Lista </Link>
+							</h3>
 
-                            <Link href="#" class="text-xs btn btn-link">
-                                Ver todas
-                            </Link>
-                        </div>
+							<Link href="#" class="text-xs btn btn-link"> Ver todas </Link>
+						</div>
 
-                        <div
-                            class="grid grid-cols-5 gap-6 p-6 mx-auto max-w-7xl sm:px-6 lg:px-8 sm:rounded-lg"
-                        >
-                            <div
-                                class="shadow-xl group card card-compact bg-base-200"
-                                v-for="anime in saved_animes"
-                                :title="anime.title"
-                            >
-                                <div>
-                                    <div
-                                        class="absolute flex flex-col justify-end w-full bottom-[60px] p-2 h-36"
-                                    >
-                                        <h4
-                                            class="z-10 text-xs font-black text-center text-white card-title line-clamp-3"
-                                        >
-                                            {{ anime.title }}
-                                        </h4>
+						<div
+							class="grid grid-cols-5 gap-6 p-6 mx-auto max-w-7xl sm:px-6 lg:px-8 sm:rounded-lg"
+						>
+							<div
+								class="shadow-xl group card card-compact bg-base-200"
+								v-for="anime in saved_animes"
+								:title="anime.title"
+							>
+								<div>
+									<div
+										class="absolute flex flex-col justify-end w-full bottom-[50px] p-2 h-36"
+									>
+										<h4
+											class="z-10 text-xs font-black text-center text-white card-title line-clamp-3"
+										>
+											{{ anime.title }}
+										</h4>
 
-                                        <div
-                                            class="absolute inset-0 opacity-80 bg-gradient-to-t from-black via-black to-transparent"
-                                        ></div>
-                                    </div>
+										<div
+											class="absolute inset-0 opacity-80 bg-gradient-to-t from-black via-black to-transparent"
+										></div>
+									</div>
 
-                                    <figure>
-                                        <img
-                                            class="w-full h-[260px] object-cover"
-                                            :src="anime.image_cover_url"
-                                        />
-                                    </figure>
-                                </div>
+									<figure>
+										<img
+											class="w-full h-[260px] object-cover"
+											:src="anime.image_cover_url"
+										/>
+									</figure>
+								</div>
 
-                                <div class="!p-2 card-body">
-                                    <!-- <p class="line-clamp-3">{{ anime.synopsis }}</p> -->
+								<div class="!p-2 card-body">
+									<div class="min-w-full card-actions">
+										<div class="min-w-full join">
+											<input
+												class="w-full max-w-xs input input-sm join-item"
+												type="number"
+												min="0"
+												placeholder="Episodio"
+												:value="anime.episode_count"
+												@change.prevent="
+													updateSavedAnimeEpisode(anime, $event.target.value)
+												"
+												@input="
+													updateSavedAnimeEpisode(anime, $event.target.value)
+												"
+											/>
 
-                                    <div class="min-w-full card-actions">
-                                        <div class="min-w-full join">
-                                            <!-- <select
-                                                class="flex-1 select !px-2 join-item"
-                                            >
-                                                <option
-                                                    v-for="i in [
-                                                        ...Array(
-                                                            anime.episode_count
-                                                        ).keys(),
-                                                    ]"
-                                                    :value="i + 1"
-                                                >
-                                                    {{ i + 1 }} Episódio
-                                                </option>
-                                            </select> -->
+											<div class="dropdown dropdown-end">
+												<label
+													tabindex="0"
+													class="btn btn-primary btn-square btn-sm join-item"
+												>
+													<Ellipsis class="w-6 h-6" />
+												</label>
 
-                                            <form
-                                                @submit.prevent="
-                                                    changeEpisode(anime)
-                                                "
-                                                action=""
-                                            >
-                                                <input
-                                                    v-model="anime.episodes"
-                                                    type="number"
-                                                    min="0"
-                                                    placeholder="Episodio"
-                                                    class="w-full max-w-xs input"
-                                                />
-                                            </form>
+												<ul
+													tabindex="0"
+													class="p-2 shadow dropdown-content menu bg-base-100 rounded-box w-52"
+												>
+													<li class="z-40">
+														<a :href="anime.link ?? '#'" target="_blank">
+															<ArrowTopRightSquare class="w-5 h-5" />
 
-                                            <div class="dropdown">
-                                                <label
-                                                    tabindex="0"
-                                                    class="btn btn-primary btn-square join-item"
-                                                >
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke-width="1.5"
-                                                        stroke="currentColor"
-                                                        class="w-6 h-6"
-                                                    >
-                                                        <path
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
-                                                        />
-                                                    </svg>
-                                                </label>
+															Assistir
+														</a>
+													</li>
 
-                                                <ul
-                                                    tabindex="0"
-                                                    class="p-2 shadow dropdown-content menu bg-base-100 rounded-box w-52"
-                                                >
-                                                    <li class="z-40">
-                                                        <a
-                                                            >Editar Link
-                                                            Assistir</a
-                                                        >
-                                                    </li>
-                                                    <li>
-                                                        <a>Remover</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </AuthenticatedLayout>
+													<li>
+														<form
+															@submit.prevent="
+																updateSavedAnimeLink($event.target)
+															"
+														>
+															<div
+																class="flex"
+																title="Cole o link do seu site de animes preferido..."
+															>
+																<input
+																	type="hidden"
+																	name="id"
+																	:value="anime.id"
+																/>
+
+																<input
+																	class="w-full max-w-xs input input-sm"
+																	type="text"
+																	placeholder="Cole seu link"
+																	name="link"
+																	:value="anime.link"
+																/>
+
+																<button title="Editar Link">
+																	<PencilSquare class="w-5 h-5" />
+																</button>
+															</div>
+														</form>
+													</li>
+
+													<li>
+														<button
+															class="text-red-500"
+															@click.prevent="removeAnime(anime.id)"
+															:onBefore="() => window.confirm('Are you sure?')"
+														>
+															<TrashBasic class="w-5 h-5" />
+
+															Remover
+														</button>
+													</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</AuthenticatedLayout>
 </template>
